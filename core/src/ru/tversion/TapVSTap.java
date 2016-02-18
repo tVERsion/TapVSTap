@@ -1,32 +1,62 @@
 package ru.tversion;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class TapVSTap extends ApplicationAdapter {
-	private static int WIDTH_DISPLAY;
-	private static int HEIGHT_DISPLAY;
-	SpriteBatch batch;
+import ru.tversion.screens.MenuScreen;
+
+public class TapVSTap extends Game {
+	private int WIDTH_DISPLAY;
+	private int HEIGHT_DISPLAY;
+	private SpriteBatch batch;
+	private BitmapFont font;
 
 	public TapVSTap(int width, int height) {
-		WIDTH_DISPLAY = width;
-		HEIGHT_DISPLAY = height;
+		setWidthDisplay(width);
+		setHeightDisplay(height);
 	}
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		font = new BitmapFont();
+		this.setScreen(new MenuScreen(this));
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 1, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
+		super.render();
+	}
 
-		batch.end();
+	@Override
+	public void dispose() {
+		super.dispose();
+		getBatch().dispose();
+		getFont().dispose();
+	}
+
+	public int getWidthDisplay() {
+		return WIDTH_DISPLAY;
+	}
+
+	public void setWidthDisplay(int widthDisplay) {
+		WIDTH_DISPLAY = widthDisplay;
+	}
+
+	public int getHeightDisplay() {
+		return HEIGHT_DISPLAY;
+	}
+
+	public void setHeightDisplay(int heightDisplay) {
+		HEIGHT_DISPLAY = heightDisplay;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
+	public BitmapFont getFont() {
+		return font;
 	}
 }
