@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import ru.tversion.screens.GameEndScreen;
 import ru.tversion.screens.MenuScreen;
 
 public class TapVSTap extends Game {
@@ -21,7 +22,7 @@ public class TapVSTap extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		this.setScreen(new MenuScreen(this));
+		this.setScreen(new GameEndScreen(this));
 	}
 
 	@Override
