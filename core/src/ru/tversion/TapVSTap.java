@@ -1,9 +1,11 @@
 package ru.tversion;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import ru.tversion.design.Font;
 import ru.tversion.screens.GameEndScreen;
 import ru.tversion.screens.MenuScreen;
 
@@ -21,8 +23,8 @@ public class TapVSTap extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		font = new BitmapFont();
-		this.setScreen(new GameEndScreen(this));
+		font = new Font("material.ttf", 48, Color.CYAN).getFont();
+		this.setScreen(new MenuScreen(this));
 	}
 
 

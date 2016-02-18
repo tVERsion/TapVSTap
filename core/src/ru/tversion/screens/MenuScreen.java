@@ -32,10 +32,9 @@ public class MenuScreen implements Screen {
         camera.update();
 
         game.getBatch().setProjectionMatrix(camera.combined);
-        game.getFont().setColor(Color.BLACK);
 
         game.getBatch().begin();
-        game.getFont().draw(game.getBatch(), "Start", 100, 100);
+        game.getFont().draw(game.getBatch(), "Start", game.getWidthDisplay()/2 - ("Start".length() / 2) * 24, game.getHeightDisplay()/2);
         game.getBatch().end();
     }
 
