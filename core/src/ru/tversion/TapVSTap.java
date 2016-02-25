@@ -27,6 +27,7 @@ public class TapVSTap extends Game {
 		this.setScreen(new MenuScreen(this));
 	}
 
+
 	@Override
 	public void render () {
 		super.render();
