@@ -1,17 +1,21 @@
 package ru.tversion;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ru.tversion.design.Font;
 import ru.tversion.screens.GameEndScreen;
 import ru.tversion.screens.MenuScreen;
+import ru.tversion.state.GameStateManager;
 
 public class TapVSTap extends Game {
 	private int WIDTH_DISPLAY;
 	private int HEIGHT_DISPLAY;
+	private GameStateManager gsm;
 	private SpriteBatch batch;
 	private BitmapFont font;
 
@@ -20,17 +24,24 @@ public class TapVSTap extends Game {
 		setHeightDisplay(height);
 	}
 
+
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		font = new Font("material.ttf", 48, Color.CYAN).getFont();
-		this.setScreen(new MenuScreen(this));
+		gsm = new GameStateManager();
+		this.setScreen(new GameEndScreen(this));
+		Gdx.gl.glClearColor(1, 0, 0, 1);
 	}
 
 
 	@Override
 	public void render () {
-		super.render();
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		gsm.update(Gdx.graphics.getDeltaTime());
+		gsm.render(batch);
 	}
 
 	@Override
