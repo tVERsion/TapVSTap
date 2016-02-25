@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ru.tversion.design.Font;
-import ru.tversion.screens.GameEndScreen;
-import ru.tversion.screens.MenuScreen;
 import ru.tversion.state.GameStateManager;
 
 public class TapVSTap extends Game {
@@ -32,7 +30,6 @@ public class TapVSTap extends Game {
 		batch = new SpriteBatch();
 		font = new Font("material.ttf", 48, Color.CYAN).getFont();
 		gsm = new GameStateManager();
-		this.setScreen(new GameEndScreen(this));
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 	}
 
