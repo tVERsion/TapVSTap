@@ -30,6 +30,7 @@ public class Font {
         font = generator.generateFont(parameter);
     }
 
+
     public BitmapFont getFont() {
         return font;
     }
