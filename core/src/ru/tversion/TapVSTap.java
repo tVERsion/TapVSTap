@@ -18,6 +18,7 @@ public class TapVSTap extends Game {
 	private SpriteBatch batch;
 	private BitmapFont font;
 
+
 	public TapVSTap(int width, int height) {
 		setWidthDisplay(width);
 		setHeightDisplay(height);
