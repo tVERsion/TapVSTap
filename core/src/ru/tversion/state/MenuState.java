@@ -17,11 +17,10 @@ public class MenuState extends State {
         background = new Texture("background.jpg");
         playBtn = new Texture("buttonStart.png");
     }
-    //обрабатываем пользовательский ввод
+
     @Override
     protected void handleInput() {
-        if(Gdx.input.justTouched())
-        {
+        if (Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm));
         }
 
@@ -36,13 +35,27 @@ public class MenuState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
-        sb.draw(playBtn, (gsm.getWidth() / 2) - (playBtn.getWidth()/ 2), gsm.getHeight() / 2);
+        sb.draw(playBtn,
+                (gsm.getWidth() - playBtn.getWidth()) / 2.0f,
+                (gsm.getHeight() - playBtn.getHeight()) / 2.0f,
+                playBtn.getWidth() / 2.0f,
+                playBtn.getHeight() / 2.0f,
+                playBtn.getWidth(),
+                playBtn.getHeight(),
+                1,
+                1,
+                180,
+                0,
+                0,
+                playBtn.getHeight(),
+                playBtn.getHeight(),
+                false,
+                false);
         sb.end();
     }
 
     @Override
     public void dispose() {
-
         background.dispose();
         playBtn.dispose();
     }
