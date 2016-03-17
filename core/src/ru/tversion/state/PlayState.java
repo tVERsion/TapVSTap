@@ -1,16 +1,18 @@
 package ru.tversion.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
 
+import ru.tversion.design.Font;
 import ru.tversion.figures.TapCircle;
 
 public class PlayState extends State {
@@ -20,18 +22,21 @@ public class PlayState extends State {
     private Texture yellow;
     private OrthographicCamera camera;
     private SpriteBatch batch;
+    private BitmapFont font;
     private Vector3 touchPos;
     private Array<TapCircle> circlesTop;
     private Array<TapCircle> circlesBottom;
     private int numberCircle;
+    private Texture background;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-
+        background = new Texture("background.png");
         timer = new Texture("timer.png");
         blue = new Texture("blue.png");
         yellow = new Texture("yellow.png");
         camera = new OrthographicCamera();
+        font = new Font("material.ttf", 48, Color.BLUE).getFont();
         batch = new SpriteBatch();
         touchPos = new Vector3();
         circlesTop = new Array<TapCircle>();
@@ -76,13 +81,10 @@ public class PlayState extends State {
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!" + touchPos.x + "      " + touchPos.y);
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@" + circlesTop.get(0).x + "   " + circlesTop.get(0).y);
+            touchPos.set(Gdx.input.getX(), gsm.getHeight() - Gdx.input.getY(), 0);
             for (int i = 0; i < numberCircle; i++) {
-                if (circlesTop.get(i).contains(touchPos.x, touchPos.y)) {
+                if (circlesTop.get(i).contains(touchPos.x - circlesTop.get(i).getTexture().getWidth() / 2, touchPos.y - circlesTop.get(i).getTexture().getHeight() / 2)) {
                     deleteCircles();
-
                     spawnCircle();
                     break;
                 }
@@ -97,22 +99,22 @@ public class PlayState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-        Gdx.gl.glClearColor(0, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
-
+        sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
         sb.draw(timer, (gsm.getWidth() / 2) - (timer.getWidth() / 2), gsm.getHeight() / 2 - (timer.getHeight() / 2));
 
             for (int i = 0; i < circlesTop.size; i++) {
-                sb.draw(blue, circlesTop.get(i).x, circlesTop.get(i).y);
+                sb.draw(circlesTop.get(i).getTexture(), circlesTop.get(i).x, circlesTop.get(i).y);
             }
-
-
+        font.draw(sb, "Серега", 100, 100);
         sb.end();
+
     }
 
     @Override
     public void dispose() {
+        background.dispose();
         yellow.dispose();
         blue.dispose();
         timer.dispose();

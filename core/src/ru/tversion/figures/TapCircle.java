@@ -48,7 +48,7 @@ public class TapCircle extends Circle {
     }
 
     public Texture getTexture() {
-        return new Texture(texture.getTextureData());
+        return texture;
     }
 
     public void setTexture(Texture texture) {
