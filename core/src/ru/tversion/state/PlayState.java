@@ -1,7 +1,10 @@
 package ru.tversion.state;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import javafx.scene.input.KeyCode;
 
 public class PlayState extends State {
 
@@ -10,10 +13,19 @@ public class PlayState extends State {
         super(gsm);
 
         timer = new Texture("timer.png");
+        Gdx.input.setCatchBackKey(false);
+
+
+
+
     }
 
     @Override
     protected void handleInput() {
+        if(Gdx.input.isCatchBackKey()){
+            dispose();
+            gsm.set(new MenuState(gsm));
+        }
 
     }
 
@@ -34,4 +46,6 @@ public class PlayState extends State {
         timer.dispose();
 
     }
+
+
 }
