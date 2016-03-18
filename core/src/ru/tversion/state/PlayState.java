@@ -17,45 +17,46 @@ import ru.tversion.figures.TapCircle;
 
 public class PlayState extends State {
 
+    private static int NUMBER_CIRCLES = 3;
+    private static int [] MARKS = {-10, -5, 5, 10};
+    private static Texture [][] TEXTURES_CIRCLES = {{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
+                                                    {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
+                                                    {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
+                                                    {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
+
+    private static int DIAMETR_CIRCLES = 150;
     private Texture timer;
-    private Texture blue;
-    private Texture yellow;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private BitmapFont font;
     private Vector3 touchPos;
     private Array<TapCircle> circlesTop;
     private Array<TapCircle> circlesBottom;
-    private int numberCircle;
     private Texture background;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
         background = new Texture("background.png");
         timer = new Texture("timer.png");
-        blue = new Texture("blue.png");
-        yellow = new Texture("yellow.png");
         camera = new OrthographicCamera();
-        font = new Font("material.ttf", 48, Color.BLUE).getFont();
+        font = new Font("material.ttf", 48, Color.BLUE, false).getFont();
         batch = new SpriteBatch();
         touchPos = new Vector3();
         circlesTop = new Array<TapCircle>();
         circlesBottom = new Array<TapCircle>();
-        numberCircle = 0;
         Gdx.input.setCatchMenuKey(true);
 
-        spawnCircle();
+        spawnTopCircle();
     }
 
-    private void spawnCircle() {
-        numberCircle = MathUtils.random(2, 3);
-        Circle baseCircle = getCircleWithRandomXY(yellow.getWidth());
+    private void spawnTopCircle() {
+        Circle baseCircle = getCircleWithRandomXY(DIAMETR_CIRCLES);
 
-        for (int i = 0; i < numberCircle; i++) {
+        for (int i = 0; i < NUMBER_CIRCLES; i++) {
             while (overlapsCircles(baseCircle)) {
-                baseCircle = getCircleWithRandomXY(yellow.getWidth());
+                baseCircle = getCircleWithRandomXY(DIAMETR_CIRCLES);
             }
-            circlesTop.add(new TapCircle(blue, baseCircle, 10, false));
+            circlesTop.add(new TapCircle(TEXTURES_CIRCLES[1][1], baseCircle, 10, false));
         }
     }
 
@@ -65,7 +66,7 @@ public class PlayState extends State {
 
     private boolean overlapsCircles(Circle circle) {
         for (int i = 0; i < circlesTop.size; i++) {
-            if(circle.overlaps(circlesTop.get(i))) {
+            if (circle.overlaps(circlesTop.get(i))) {
                 return true;
             }
         }
@@ -73,7 +74,7 @@ public class PlayState extends State {
     }
 
     private void deleteCircles() {
-        for(int i = 0; i < numberCircle; i++) {
+        for (int i = 0; i < NUMBER_CIRCLES; i++) {
             circlesTop.removeIndex(0);
         }
     }
@@ -82,10 +83,10 @@ public class PlayState extends State {
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
             touchPos.set(Gdx.input.getX(), gsm.getHeight() - Gdx.input.getY(), 0);
-            for (int i = 0; i < numberCircle; i++) {
+            for (int i = 0; i < NUMBER_CIRCLES; i++) {
                 if (circlesTop.get(i).contains(touchPos.x - circlesTop.get(i).getTexture().getWidth() / 2, touchPos.y - circlesTop.get(i).getTexture().getHeight() / 2)) {
                     deleteCircles();
-                    spawnCircle();
+                    spawnTopCircle();
                     break;
                 }
             }
@@ -104,10 +105,10 @@ public class PlayState extends State {
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
         sb.draw(timer, (gsm.getWidth() / 2) - (timer.getWidth() / 2), gsm.getHeight() / 2 - (timer.getHeight() / 2));
 
-            for (int i = 0; i < circlesTop.size; i++) {
-                sb.draw(circlesTop.get(i).getTexture(), circlesTop.get(i).x, circlesTop.get(i).y);
-            }
-        font.draw(sb, "Серега", 100, 100);
+        for (int i = 0; i < circlesTop.size; i++) {
+            sb.draw(circlesTop.get(i).getTexture(), circlesTop.get(i).x, circlesTop.get(i).y);
+        }
+        font.draw(sb, "Серега", 300, 300);
         sb.end();
 
     }
@@ -115,8 +116,11 @@ public class PlayState extends State {
     @Override
     public void dispose() {
         background.dispose();
-        yellow.dispose();
-        blue.dispose();
+        for (int i = 0; i < TEXTURES_CIRCLES.length; i++) {
+            for (int j = 0; j < TEXTURES_CIRCLES[0].length; j++) {
+                TEXTURES_CIRCLES[i][j].dispose();
+            }
+        }
         timer.dispose();
         batch.dispose();
     }
