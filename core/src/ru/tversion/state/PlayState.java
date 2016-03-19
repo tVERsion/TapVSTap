@@ -18,13 +18,13 @@ import ru.tversion.figures.TapCircle;
 public class PlayState extends State {
 
     private static int NUMBER_CIRCLES = 3;
-    private static int [] MARKS = {-10, -5, 5, 10};
-    private static Texture [][] TEXTURES_CIRCLES = {{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
-                                                    {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
-                                                    {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
-                                                    {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
+    private static int[] MARKS = {-10, -5, 5, 10};
+    private static Texture[][] TEXTURES_CIRCLES = {{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
+            {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
+            {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
+            {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
 
-    private static int DIAMETR_CIRCLES = 150;
+    private static int DIAMETER_CIRCLES = 150;
     private Texture timer;
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -50,14 +50,25 @@ public class PlayState extends State {
     }
 
     private void spawnTopCircle() {
-        Circle baseCircle = getCircleWithRandomXY(DIAMETR_CIRCLES);
+        Circle baseCircle = getCircleWithRandomXY(DIAMETER_CIRCLES);
 
-        for (int i = 0; i < NUMBER_CIRCLES; i++) {
-            while (overlapsCircles(baseCircle)) {
-                baseCircle = getCircleWithRandomXY(DIAMETR_CIRCLES);
-            }
-            circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][1], baseCircle, 10, false));
+        while (overlapsCircles(baseCircle)) {
+            baseCircle = getCircleWithRandomXY(DIAMETER_CIRCLES);
         }
+        int tmpRandomIndex = MathUtils.random(0, 1);
+        circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex], false));
+
+        while (overlapsCircles(baseCircle)) {
+            baseCircle = getCircleWithRandomXY(DIAMETER_CIRCLES);
+        }
+        tmpRandomIndex = MathUtils.random(2, 3);
+        circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex], false));
+
+        while (overlapsCircles(baseCircle)) {
+            baseCircle = getCircleWithRandomXY(DIAMETER_CIRCLES);
+        }
+        tmpRandomIndex = MathUtils.random(0, 3);
+        circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex], false));
     }
 
     private Circle getCircleWithRandomXY(int diameter) {
@@ -102,13 +113,14 @@ public class PlayState extends State {
     public void render(SpriteBatch sb) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
+
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
         sb.draw(timer, (gsm.getWidth() / 2) - (timer.getWidth() / 2), gsm.getHeight() / 2 - (timer.getHeight() / 2));
 
         for (int i = 0; i < circlesTop.size; i++) {
             sb.draw(circlesTop.get(i).getTexture(), circlesTop.get(i).x, circlesTop.get(i).y);
         }
-        font.draw(sb, "Серега", 300, 300);
+
         sb.end();
 
     }

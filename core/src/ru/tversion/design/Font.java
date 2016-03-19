@@ -11,8 +11,9 @@ public class Font {
     private BitmapFont font;
     private String FONT_PATH;
 
-    public Font(String fileName, int size, Color color) {
+    public Font(String fileName, int size, Color color, boolean flip) {
         FONT_PATH = fileName;
+
         String FONT_CHARS = "";
         for (int i = 32; i < 127; i++) {
             FONT_CHARS += (char) i;
@@ -28,6 +29,10 @@ public class Font {
         parameter.color = color;
 
         font = generator.generateFont(parameter);
+        if (flip) {
+            font.getData().scaleY = -1.0f;
+            font.getData().scaleX = -1.0f;
+        }
     }
 
 

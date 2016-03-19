@@ -5,25 +5,18 @@ import com.badlogic.gdx.math.Circle;
 
 public class TapCircle extends Circle {
     private int weight;
-    private boolean sign;
     private Texture texture;
 
-    public TapCircle(int weight, boolean sign) {
+    public TapCircle(int weight) {
         super();
-        if (!sign) {
-            this.setWeight(-weight);
-        } else {
-            this.setWeight(weight);
-        }
+        this.setWeight(-weight);
+        this.setWeight(weight);
     }
 
     public TapCircle(Texture texture, Circle circle, int weight, boolean sign) {
         super(circle);
-        if (!sign) {
-            this.setWeight(-weight);
-        } else {
-            this.setWeight(weight);
-        }
+        this.setWeight(-weight);
+        this.setWeight(weight);
         this.setTexture(texture);
     }
 
@@ -39,14 +32,6 @@ public class TapCircle extends Circle {
         return contains(x, y);
     }
 
-    public boolean isSign() {
-        return sign;
-    }
-
-    public void setSign(boolean sign) {
-        this.sign = sign;
-    }
-
     public Texture getTexture() {
         return texture;
     }
@@ -56,7 +41,7 @@ public class TapCircle extends Circle {
     }
 
     public TapCircle clone() {
-        TapCircle cloneTapCircle = new TapCircle(this.weight, this.sign);
+        TapCircle cloneTapCircle = new TapCircle(this.weight);
         cloneTapCircle.set(this.x, this.y, this.radius);
         cloneTapCircle.setTexture(this.getTexture());
         return cloneTapCircle;
