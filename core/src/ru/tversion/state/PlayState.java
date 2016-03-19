@@ -56,7 +56,7 @@ public class PlayState extends State {
             while (overlapsCircles(baseCircle)) {
                 baseCircle = getCircleWithRandomXY(DIAMETR_CIRCLES);
             }
-            circlesTop.add(new TapCircle(TEXTURES_CIRCLES[1][1], baseCircle, 10, false));
+            circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][1], baseCircle, 10, false));
         }
     }
 
