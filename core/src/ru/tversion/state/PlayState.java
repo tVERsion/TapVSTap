@@ -1,6 +1,7 @@
 package ru.tversion.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import ru.tversion.design.Font;
 import ru.tversion.figures.TapCircle;
@@ -19,10 +21,7 @@ public class PlayState extends State {
 
     private static int NUMBER_CIRCLES = 3;
     private static int[] MARKS = {-10, -5, 5, 10};
-    private static Texture[][] TEXTURES_CIRCLES = {{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
-            {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
-            {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
-            {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
+    private Texture[][] texturesCircle;
 
     private static int DIAMETER_CIRCLES = 150;
     private Texture timer;
@@ -35,8 +34,16 @@ public class PlayState extends State {
     private Array<TapCircle> circlesBottom;
     private Texture background;
 
+
     public PlayState(GameStateManager gsm) {
         super(gsm);
+
+
+        texturesCircle = new Texture[][]{{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
+                {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
+                {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
+                {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
+        Gdx.input.setCatchBackKey(false);
         background = new Texture("background.png");
         timer = new Texture("timer.png");
         camera = new OrthographicCamera();
@@ -60,19 +67,19 @@ public class PlayState extends State {
             baseCircle = getTopCircleWithRandomXY(DIAMETER_CIRCLES);
         }
         int tmpRandomIndex = MathUtils.random(0, 1);
-        circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
+        circlesTop.add(new TapCircle(texturesCircle[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
 
         while (overlapsCircles(baseCircle)) {
             baseCircle = getTopCircleWithRandomXY(DIAMETER_CIRCLES);
         }
         tmpRandomIndex = MathUtils.random(2, 3);
-        circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
+        circlesTop.add(new TapCircle(texturesCircle[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
 
         while (overlapsCircles(baseCircle)) {
             baseCircle = getTopCircleWithRandomXY(DIAMETER_CIRCLES);
         }
         tmpRandomIndex = MathUtils.random(0, 3);
-        circlesTop.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
+        circlesTop.add(new TapCircle(texturesCircle[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
     }
 
     private void spawnBottomCircle() {
@@ -82,19 +89,19 @@ public class PlayState extends State {
             baseCircle = getBottomCircleWithRandomXY(DIAMETER_CIRCLES);
         }
         int tmpRandomIndex = MathUtils.random(0, 1);
-        circlesBottom.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
+        circlesBottom.add(new TapCircle(texturesCircle[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
 
         while (overlapsCircles(baseCircle)) {
             baseCircle = getBottomCircleWithRandomXY(DIAMETER_CIRCLES);
         }
         tmpRandomIndex = MathUtils.random(2, 3);
-        circlesBottom.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
+        circlesBottom.add(new TapCircle(texturesCircle[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
 
         while (overlapsCircles(baseCircle)) {
             baseCircle = getBottomCircleWithRandomXY(DIAMETER_CIRCLES);
         }
         tmpRandomIndex = MathUtils.random(0, 3);
-        circlesBottom.add(new TapCircle(TEXTURES_CIRCLES[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
+        circlesBottom.add(new TapCircle(texturesCircle[MathUtils.random(0, 3)][tmpRandomIndex], baseCircle, MARKS[tmpRandomIndex]));
     }
 
     private Circle getTopCircleWithRandomXY(int diameter) {
@@ -133,6 +140,9 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput() {
+        if (Gdx.input.isKeyPressed(Keys.BACK)){
+            gsm.set(new MenuState(gsm));
+        }
         if (Gdx.input.isTouched(0)) {
 
             touchPosTop.set(Gdx.input.getX(0), gsm.getHeight() - Gdx.input.getY(0), 0);
@@ -181,6 +191,7 @@ public class PlayState extends State {
         }
     }
 
+
     @Override
     public void update(float dt) {
         handleInput();
@@ -188,6 +199,9 @@ public class PlayState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
+
+
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
 
@@ -218,15 +232,14 @@ public class PlayState extends State {
         }
 
         sb.end();
-
     }
 
     @Override
     public void dispose() {
         background.dispose();
-        for (int i = 0; i < TEXTURES_CIRCLES.length; i++) {
-            for (int j = 0; j < TEXTURES_CIRCLES[0].length; j++) {
-                TEXTURES_CIRCLES[i][j].dispose();
+        for (int i = 0; i < texturesCircle.length; i++) {
+            for (int j = 0; j < texturesCircle[0].length; j++) {
+                texturesCircle[i][j].dispose();
             }
         }
         timer.dispose();
