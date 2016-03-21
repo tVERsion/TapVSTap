@@ -14,6 +14,7 @@ public class MenuState extends State {
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
+        Gdx.input.setCatchBackKey(true);
         background = new Texture("background.png");
         playBtn = new Texture("buttonStart.png");
     }
@@ -21,7 +22,7 @@ public class MenuState extends State {
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm));
+            gsm.set(new TimerState(gsm));
         }
 
     }
