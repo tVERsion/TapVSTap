@@ -13,7 +13,7 @@ public class TapCircle extends Circle {
         this.setWeight(weight);
     }
 
-    public TapCircle(Texture texture, Circle circle, int weight, boolean sign) {
+    public TapCircle(Texture texture, Circle circle, int weight) {
         super(circle);
         this.setWeight(-weight);
         this.setWeight(weight);
