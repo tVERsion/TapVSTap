@@ -19,6 +19,7 @@ public class GameStateManager {
         this.width = width;
         states = new Stack<State>();
 
+
     }
 
     public void push(State state) {
