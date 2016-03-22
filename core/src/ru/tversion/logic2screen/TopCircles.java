@@ -91,9 +91,10 @@ public class TopCircles implements Circles {
     }
 
     @Override
-    public void processPress(float x, float y, Texture[][] textures, int[] marks, int diameter) {
+    public void processPress(GameStateManager gsm, float x, float y, Texture[][] textures, int[] marks, int diameter) {
         for (int i = 0; i < NUMBER_CIRCLES; i++) {
             if (getCircle(i).contains(x - getCircle(i).getTexture().getWidth() / 2, y - getCircle(i).getTexture().getHeight() / 2)) {
+                gsm.getScore().addMark(getCircle(i), true);
                 delete();
                 spawn(textures, marks, diameter);
                 return;

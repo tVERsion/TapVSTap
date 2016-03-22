@@ -6,23 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import ru.tversion.Timer;
+
 public class TimerState extends State {
     private Texture background;
-    private long timeStart;
-    private static long SECOND_LONG = 1000000000;
-    private Array<Texture> seconds;
+    private Timer timer;
+
     private static int THREE_SECOND = 3;
 
     public TimerState(GameStateManager gsm) {
         super(gsm);
-        seconds = new Array<Texture>();
-        for (int i = THREE_SECOND; i >= 0; i--) {
-            String nameTextures = i + ".png";
-            seconds.add(new Texture(nameTextures));
-        }
+        timer = new Timer(THREE_SECOND);
         background = new Texture("background.png");
-        timeStart = TimeUtils.nanoTime();
-
     }
 
     @Override
@@ -41,8 +36,8 @@ public class TimerState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
-        sb.draw(seconds.get((int) (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG)), (gsm.getWidth() / 2) - (seconds.get((int) (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG)).getWidth() / 2), gsm.getHeight() / 2 - (seconds.get((int) (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG)).getHeight() / 2));
-        if (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG >= THREE_SECOND) {
+        timer.draw(sb, gsm);
+        if (timer.isEnd()) {
             gsm.set(new PlayState(gsm));
         }
         sb.end();
@@ -51,9 +46,6 @@ public class TimerState extends State {
     @Override
     public void dispose() {
         background.dispose();
-        for (int i = 0; i < seconds.size; i++) {
-            seconds.get(i).dispose();
-        }
-
+        timer.dispose();
     }
 }

@@ -31,7 +31,14 @@ public class Score {
             totalScoreTop = getTotalScoreTop() + 1;
         }
         currentScoreTop = 0;
-        totalScoreBottom = 0;
+        currentScoreBottom = 0;
+    }
+
+    public void setToZero() {
+        this.currentScoreTop = 0;
+        this.currentScoreBottom = 0;
+        this.totalScoreTop = 0;
+        this.totalScoreBottom = 0;
     }
 
     public boolean isHeadHeat() {

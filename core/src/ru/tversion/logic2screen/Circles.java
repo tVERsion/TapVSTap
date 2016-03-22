@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 
 import ru.tversion.figures.TapCircle;
+import ru.tversion.state.GameStateManager;
 
 public interface Circles {
 
@@ -14,5 +15,5 @@ public interface Circles {
     public boolean overlapsCircles(Circle circle);
     public void delete();
     public TapCircle getCircle(int i);
-    public void processPress(float x, float y, Texture[][] textures, int[] marks, int diameter);
+    public void processPress(GameStateManager gsm, float x, float y, Texture[][] textures, int[] marks, int diameter);
 }

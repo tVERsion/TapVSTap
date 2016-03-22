@@ -8,24 +8,23 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 
+import ru.tversion.Timer;
 import ru.tversion.design.Font;
-import ru.tversion.figures.TapCircle;
 import ru.tversion.logic2screen.BottomCircles;
 import ru.tversion.logic2screen.Circles;
 import ru.tversion.logic2screen.TopCircles;
 
 public class PlayState extends State {
 
-    private static int[] MARKS = {-10, -5, 5, 10};
+    private static int[] MARKS = {-5, -10, 5, 10};
     private Texture[][] textures;
+    private Timer timer;
 
     private static int DIAMETER_CIRCLES = 150;
-    private Texture timer;
+    private static int LENGTH_FIRST_ROUND = 5;
+    private Texture timerTex;
     private SpriteBatch batch;
     private BitmapFont font;
     private Vector3 touchPosTop;
@@ -37,13 +36,13 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-
+        timer = new Timer(LENGTH_FIRST_ROUND);
         background = new Texture("background.png");
         textures = new Texture[][]{{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
-                {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
-                {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
-                {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
-        timer = new Texture("timer.png");
+                                   {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
+                                   {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
+                                   {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
+        timerTex = new Texture("timer.png");
         camera = new OrthographicCamera();
 
         batch = new SpriteBatch();
@@ -53,7 +52,9 @@ public class PlayState extends State {
         circlesTop = new TopCircles(gsm);
         circlesBottom = new BottomCircles(gsm);
 
-        Gdx.input.setCatchMenuKey(true);
+        font = new Font("material.ttf", 40, Color.BLUE, false).getFont();
+
+        //Gdx.input.setCatchMenuKey(true);
         Gdx.input.setCatchBackKey(false);
 
         circlesTop.spawn(textures, MARKS, DIAMETER_CIRCLES);
@@ -64,21 +65,22 @@ public class PlayState extends State {
     protected void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
             gsm.set(new MenuState(gsm));
+            gsm.getScore().setToZero();
         }
         if (Gdx.input.isTouched(0)) {
             touchPosTop.set(Gdx.input.getX(0), gsm.getHeight() - Gdx.input.getY(0), 0);
             if (gsm.getHeight() - Gdx.input.getY(0) > gsm.getHeight() / 2) {
-                circlesTop.processPress(touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
+                circlesTop.processPress(gsm, touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
             } else {
-                circlesBottom.processPress(touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
+                circlesBottom.processPress(gsm, touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
             }
         }
         if (Gdx.input.isTouched(1)) {
             touchPosBottom.set(Gdx.input.getX(1), gsm.getHeight() - Gdx.input.getY(1), 0);
             if (gsm.getHeight() - Gdx.input.getY(1) > gsm.getHeight() / 2) {
-                circlesTop.processPress(touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
+                circlesTop.processPress(gsm, touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
             } else {
-                circlesBottom.processPress(touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
+                circlesBottom.processPress(gsm, touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
             }
         }
     }
@@ -98,10 +100,17 @@ public class PlayState extends State {
         sb.begin();
 
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
-        sb.draw(timer, (gsm.getWidth() / 2) - (timer.getWidth() / 2), gsm.getHeight() / 2 - (timer.getHeight() / 2));
+        sb.draw(timerTex, (gsm.getWidth() / 2) - (timerTex.getWidth() / 2), gsm.getHeight() / 2 - (timerTex.getHeight() / 2));
+
+        font.draw(sb, ""+gsm.getScore().getCurrentScoreTop(), 100, 100);
+        font.draw(sb, ""+gsm.getScore().getCurrentScoreBottom(), 200, 100);
 
         circlesTop.draw(sb);
         circlesBottom.draw(sb);
+        timer.draw(sb, gsm);
+        if (timer.isEnd()) {
+
+        }
 
         sb.end();
     }
