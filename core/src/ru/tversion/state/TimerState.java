@@ -3,19 +3,24 @@ package ru.tversion.state;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import ru.tversion.design.Font;
-
 public class TimerState extends State {
-    private Texture timer;
     private Texture background;
     private long timeStart;
+    private static long SECOND_LONG = 1000000000;
+    private Array<Texture> seconds;
+    private static int THREE_SECOND = 3;
 
     public TimerState(GameStateManager gsm) {
         super(gsm);
+        seconds = new Array<Texture>();
+        for (int i = THREE_SECOND; i >= 0; i--) {
+            String nameTextures = i + ".png";
+            seconds.add(new Texture(nameTextures));
+        }
         background = new Texture("background.png");
-        timer = new Texture("timer.png");
         timeStart = TimeUtils.nanoTime();
 
     }
@@ -25,7 +30,6 @@ public class TimerState extends State {
         if (Gdx.input.justTouched()) {
             return;
         }
-
     }
 
     @Override
@@ -37,19 +41,19 @@ public class TimerState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
-        sb.draw(timer, (gsm.getWidth() / 2) - (timer.getWidth() / 2), gsm.getHeight() / 2 - (timer.getHeight() / 2));
-        if (TimeUtils.nanoTime()/1000000000 - timeStart/1000000000 > 3) {
+        sb.draw(seconds.get((int) (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG)), (gsm.getWidth() / 2) - (seconds.get((int) (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG)).getWidth() / 2), gsm.getHeight() / 2 - (seconds.get((int) (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG)).getHeight() / 2));
+        if (TimeUtils.nanoTime() / SECOND_LONG - timeStart / SECOND_LONG >= THREE_SECOND) {
             gsm.set(new PlayState(gsm));
         }
-
         sb.end();
     }
 
     @Override
     public void dispose() {
         background.dispose();
-        timer.dispose();
+        for (int i = 0; i < seconds.size; i++) {
+            seconds.get(i).dispose();
+        }
 
     }
-
 }

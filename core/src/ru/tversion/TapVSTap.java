@@ -27,7 +27,7 @@ public class TapVSTap extends Game {
     @Override
     public void create () {
         batch = new SpriteBatch();
-        //font = new Font("material.ttf", 48, Color.CYAN).getFont();
+        font = new Font("material.ttf", 48, Color.CYAN, false).getFont();
         gsm = new GameStateManager(getHeightDisplay(), getWidthDisplay());
         Gdx.gl.glClearColor(1, 0, 0, 1);
         gsm.push(new MenuState(gsm));
