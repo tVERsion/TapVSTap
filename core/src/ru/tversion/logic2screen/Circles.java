@@ -14,4 +14,5 @@ public interface Circles {
     public boolean overlapsCircles(Circle circle);
     public void delete();
     public TapCircle getCircle(int i);
+    public void processPress(float x, float y, Texture[][] textures, int[] marks, int diameter);
 }

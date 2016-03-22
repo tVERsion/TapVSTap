@@ -20,20 +20,19 @@ import ru.tversion.logic2screen.TopCircles;
 
 public class PlayState extends State {
 
-    private static int NUMBER_CIRCLES = 3;
     private static int[] MARKS = {-10, -5, 5, 10};
     private Texture[][] textures;
 
     private static int DIAMETER_CIRCLES = 150;
     private Texture timer;
-    private OrthographicCamera camera;
     private SpriteBatch batch;
-   // private BitmapFont font;
+    private BitmapFont font;
     private Vector3 touchPosTop;
     private Vector3 touchPosBottom;
     private Circles circlesTop;
     private Circles circlesBottom;
     private Texture background;
+    private int round;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -42,7 +41,6 @@ public class PlayState extends State {
                 {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
                 {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
                 {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
-
         timer = new Texture("timer.png");
         camera = new OrthographicCamera();
         //font = new Font("material.ttf", 48, Color.BLUE, false).getFont();
@@ -62,49 +60,25 @@ public class PlayState extends State {
     @Override
     protected void handleInput() {
         if (Gdx.input.isTouched(0)) {
-
             touchPosTop.set(Gdx.input.getX(0), gsm.getHeight() - Gdx.input.getY(0), 0);
             if (gsm.getHeight() - Gdx.input.getY(0) > gsm.getHeight() / 2) {
-                for (int i = 0; i < NUMBER_CIRCLES; i++) {
-                    if (circlesTop.getCircle(i).contains(touchPosTop.x - circlesTop.getCircle(i).getTexture().getWidth() / 2, touchPosTop.y - circlesTop.getCircle(i).getTexture().getHeight() / 2)) {
-                        circlesTop.delete();
-                        circlesTop.spawn(textures, MARKS, DIAMETER_CIRCLES);
-                        break;
-                    }
-                }
+                circlesTop.processPress(touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
             } else {
-                for (int i = 0; i < NUMBER_CIRCLES; i++) {
-                    if (circlesBottom.getCircle(i).contains(touchPosTop.x - circlesBottom.getCircle(i).getTexture().getWidth() / 2, touchPosTop.y - circlesBottom.getCircle(i).getTexture().getHeight() / 2)) {
-                        circlesBottom.delete();
-                        circlesBottom.spawn(textures, MARKS, DIAMETER_CIRCLES);
-                        break;
-
-                    }
-                }
+                circlesBottom.processPress(touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
             }
-
         }
         if (Gdx.input.isTouched(1)) {
             touchPosBottom.set(Gdx.input.getX(1), gsm.getHeight() - Gdx.input.getY(1), 0);
             if (gsm.getHeight() - Gdx.input.getY(1) > gsm.getHeight() / 2) {
-                for (int i = 0; i < NUMBER_CIRCLES; i++) {
-                    if (circlesTop.getCircle(i).contains(touchPosBottom.x - circlesTop.getCircle(i).getTexture().getWidth() / 2, touchPosBottom.y - circlesTop.getCircle(i).getTexture().getHeight() / 2)) {
-                        circlesTop.delete();
-                        circlesTop.spawn(textures, MARKS, DIAMETER_CIRCLES);
-                        break;
-                    }
-                }
+                circlesTop.processPress(touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
             } else {
-                for (int i = 0; i < NUMBER_CIRCLES; i++) {
-                    if (circlesBottom.getCircle(i).contains(touchPosBottom.x - circlesBottom.getCircle(i).getTexture().getWidth() / 2, touchPosBottom.y - circlesBottom.getCircle(i).getTexture().getHeight() / 2)) {
-                        circlesBottom.delete();
-                        circlesBottom.spawn(textures, MARKS, DIAMETER_CIRCLES);
-                        break;
-                    }
-                }
+                circlesBottom.processPress(touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
             }
-
         }
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 
     @Override
@@ -124,7 +98,6 @@ public class PlayState extends State {
         circlesBottom.draw(sb);
 
         sb.end();
-
     }
 
     @Override

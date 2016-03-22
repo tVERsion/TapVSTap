@@ -8,6 +8,8 @@ public class GameStateManager {
     private Stack<State> states;
     private int height;
     private int width;
+    private static int NUMBER_ROUND = 3;
+    private int currentRound;
 
 
     public GameStateManager() {
@@ -18,8 +20,7 @@ public class GameStateManager {
         this.height = height;
         this.width = width;
         states = new Stack<State>();
-
-
+        currentRound = 1;
     }
 
     public void push(State state) {
@@ -31,6 +32,13 @@ public class GameStateManager {
     }
 
     public void set(State state) {
+        states.pop().dispose();
+        states.push(state);
+    }
+
+    public void set(PlayState state) {
+        state.setRound(currentRound);
+        currentRound++;
         states.pop().dispose();
         states.push(state);
     }

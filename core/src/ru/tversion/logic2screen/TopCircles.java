@@ -89,4 +89,15 @@ public class TopCircles implements Circles {
     public TapCircle getCircle(int i) {
         return circles.get(i);
     }
+
+    @Override
+    public void processPress(float x, float y, Texture[][] textures, int[] marks, int diameter) {
+        for (int i = 0; i < NUMBER_CIRCLES; i++) {
+            if (getCircle(i).contains(x - getCircle(i).getTexture().getWidth() / 2, y - getCircle(i).getTexture().getHeight() / 2)) {
+                delete();
+                spawn(textures, marks, diameter);
+                return;
+            }
+        }
+    }
 }
