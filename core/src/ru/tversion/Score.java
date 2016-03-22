@@ -60,4 +60,8 @@ public class Score {
     public int getTotalScoreBottom() {
         return totalScoreBottom;
     }
+
+    public boolean isWinTop() {
+        return totalScoreTop > totalScoreBottom;
+    }
 }

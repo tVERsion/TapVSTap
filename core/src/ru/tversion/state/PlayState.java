@@ -25,24 +25,26 @@ public class PlayState extends State {
     private static int DIAMETER_CIRCLES = 150;
     private static int LENGTH_FIRST_ROUND = 5;
     private Texture timerTex;
+    private Texture score;
     private SpriteBatch batch;
-    private BitmapFont font;
+    private BitmapFont fontBottom;
+    private BitmapFont fontTop;
     private Vector3 touchPosTop;
     private Vector3 touchPosBottom;
     private Circles circlesTop;
     private Circles circlesBottom;
     private Texture background;
-    private int round;
 
-    public PlayState(GameStateManager gsm) {
+    public PlayState(GameStateManager gsm, int round) {
         super(gsm);
-        timer = new Timer(LENGTH_FIRST_ROUND);
+        timer = new Timer(round * LENGTH_FIRST_ROUND);
         background = new Texture("background.png");
         textures = new Texture[][]{{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
                                    {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
                                    {new Texture("R-5.png"), new Texture("R-10.png"), new Texture("R+5.png"), new Texture("R+10.png")},
                                    {new Texture("Y-5.png"), new Texture("Y-10.png"), new Texture("Y+5.png"), new Texture("Y+10.png")}};
         timerTex = new Texture("timer.png");
+        score = new Texture("score.png");
         camera = new OrthographicCamera();
 
         batch = new SpriteBatch();
@@ -52,9 +54,9 @@ public class PlayState extends State {
         circlesTop = new TopCircles(gsm);
         circlesBottom = new BottomCircles(gsm);
 
-        font = new Font("material.ttf", 40, Color.BLUE, false).getFont();
+        fontBottom = new Font("material.ttf", 35, Color.WHITE, false).getFont();
+        fontTop = new Font("material.ttf", 35, Color.WHITE, true).getFont();
 
-        //Gdx.input.setCatchMenuKey(true);
         Gdx.input.setCatchBackKey(false);
 
         circlesTop.spawn(textures, MARKS, DIAMETER_CIRCLES);
@@ -67,7 +69,7 @@ public class PlayState extends State {
             gsm.set(new MenuState(gsm));
             gsm.getScore().setToZero();
         }
-        if (Gdx.input.isTouched(0)) {
+        if (Gdx.input.justTouched()) {
             touchPosTop.set(Gdx.input.getX(0), gsm.getHeight() - Gdx.input.getY(0), 0);
             if (gsm.getHeight() - Gdx.input.getY(0) > gsm.getHeight() / 2) {
                 circlesTop.processPress(gsm, touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
@@ -75,7 +77,7 @@ public class PlayState extends State {
                 circlesBottom.processPress(gsm, touchPosTop.x, touchPosTop.y, textures, MARKS, DIAMETER_CIRCLES);
             }
         }
-        if (Gdx.input.isTouched(1)) {
+        if (Gdx.input.justTouched()) {
             touchPosBottom.set(Gdx.input.getX(1), gsm.getHeight() - Gdx.input.getY(1), 0);
             if (gsm.getHeight() - Gdx.input.getY(1) > gsm.getHeight() / 2) {
                 circlesTop.processPress(gsm, touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
@@ -83,10 +85,6 @@ public class PlayState extends State {
                 circlesBottom.processPress(gsm, touchPosBottom.x, touchPosBottom.y, textures, MARKS, DIAMETER_CIRCLES);
             }
         }
-    }
-
-    public void setRound(int round) {
-        this.round = round;
     }
 
     @Override
@@ -102,14 +100,17 @@ public class PlayState extends State {
         sb.draw(background, 0, 0, gsm.getWidth(), gsm.getHeight());
         sb.draw(timerTex, (gsm.getWidth() / 2) - (timerTex.getWidth() / 2), gsm.getHeight() / 2 - (timerTex.getHeight() / 2));
 
-        font.draw(sb, ""+gsm.getScore().getCurrentScoreTop(), 100, 100);
-        font.draw(sb, ""+gsm.getScore().getCurrentScoreBottom(), 200, 100);
+        sb.draw(score, 0, gsm.getHeight() / 2 - score.getHeight());
+        sb.draw(score, gsm.getWidth() - score.getWidth(), gsm.getHeight() / 2);
+
+        fontTop.draw(sb, ""+gsm.getScore().getCurrentScoreTop(), gsm.getWidth() - 50, gsm.getHeight() / 2 + 10);
+        fontBottom.draw(sb, ""+gsm.getScore().getCurrentScoreBottom(), 50, gsm.getHeight() / 2 - 25);
 
         circlesTop.draw(sb);
         circlesBottom.draw(sb);
         timer.draw(sb, gsm);
         if (timer.isEnd()) {
-
+            gsm.set(new TimerState(gsm));
         }
 
         sb.end();
@@ -124,6 +125,7 @@ public class PlayState extends State {
             }
         }
         timer.dispose();
+        score.dispose();
         batch.dispose();
     }
 }

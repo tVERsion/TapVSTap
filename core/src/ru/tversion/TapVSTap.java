@@ -31,7 +31,7 @@ public class TapVSTap extends Game {
         font = new Font("material.ttf", 48, Color.CYAN, false).getFont();
         gsm = new GameStateManager(getHeightDisplay(), getWidthDisplay());
         Gdx.gl.glClearColor(1, 0, 0, 1);
-        gsm.push(new RestartState(gsm));
+        gsm.push(new MenuState(gsm));
 
     }
     @Override
