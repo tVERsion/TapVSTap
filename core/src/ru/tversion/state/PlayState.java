@@ -1,6 +1,7 @@
 package ru.tversion.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -37,6 +38,7 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
+
         background = new Texture("background.png");
         textures = new Texture[][]{{new Texture("B-5.png"), new Texture("B-10.png"), new Texture("B+5.png"), new Texture("B+10.png")},
                 {new Texture("G-5.png"), new Texture("G-10.png"), new Texture("G+5.png"), new Texture("G+10.png")},
@@ -45,7 +47,7 @@ public class PlayState extends State {
 
         timer = new Texture("timer.png");
         camera = new OrthographicCamera();
-        //font = new Font("material.ttf", 48, Color.BLUE, false).getFont();
+
         batch = new SpriteBatch();
         touchPosTop = new Vector3();
         touchPosBottom = new Vector3();
@@ -54,6 +56,7 @@ public class PlayState extends State {
         circlesBottom = new BottomCircles(gsm);
 
         Gdx.input.setCatchMenuKey(true);
+        Gdx.input.setCatchBackKey(false);
 
         circlesTop.spawn(textures, MARKS, DIAMETER_CIRCLES);
         circlesBottom.spawn(textures, MARKS, DIAMETER_CIRCLES);
@@ -61,8 +64,10 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            gsm.set(new MenuState(gsm));
+        }
         if (Gdx.input.isTouched(0)) {
-
             touchPosTop.set(Gdx.input.getX(0), gsm.getHeight() - Gdx.input.getY(0), 0);
             if (gsm.getHeight() - Gdx.input.getY(0) > gsm.getHeight() / 2) {
                 for (int i = 0; i < NUMBER_CIRCLES; i++) {
