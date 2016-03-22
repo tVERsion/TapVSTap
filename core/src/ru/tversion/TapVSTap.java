@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ru.tversion.design.Font;
 import ru.tversion.state.GameStateManager;
 import ru.tversion.state.MenuState;
+import ru.tversion.state.RestartState;
 
 public class TapVSTap extends Game {
     private int WIDTH_DISPLAY;
@@ -30,7 +31,7 @@ public class TapVSTap extends Game {
         font = new Font("material.ttf", 48, Color.CYAN, false).getFont();
         gsm = new GameStateManager(getHeightDisplay(), getWidthDisplay());
         Gdx.gl.glClearColor(1, 0, 0, 1);
-        gsm.push(new MenuState(gsm));
+        gsm.push(new RestartState(gsm));
 
     }
     @Override

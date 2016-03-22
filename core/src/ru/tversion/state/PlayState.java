@@ -1,20 +1,11 @@
 package ru.tversion.state;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-
-import ru.tversion.design.Font;
-import ru.tversion.figures.TapCircle;
 import ru.tversion.logic2screen.BottomCircles;
 import ru.tversion.logic2screen.Circles;
 import ru.tversion.logic2screen.TopCircles;
@@ -29,7 +20,6 @@ public class PlayState extends State {
     private Texture timer;
     private OrthographicCamera camera;
     private SpriteBatch batch;
-   // private BitmapFont font;
     private Vector3 touchPosTop;
     private Vector3 touchPosBottom;
     private Circles circlesTop;
@@ -87,7 +77,6 @@ public class PlayState extends State {
                     }
                 }
             }
-
         }
         if (Gdx.input.isTouched(1)) {
             touchPosBottom.set(Gdx.input.getX(1), gsm.getHeight() - Gdx.input.getY(1), 0);
@@ -129,7 +118,6 @@ public class PlayState extends State {
         circlesBottom.draw(sb);
 
         sb.end();
-
     }
 
     @Override
