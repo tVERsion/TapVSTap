@@ -1,0 +1,14 @@
+language: java 
+cache: bundler
+addons:
+ ssh_known_hosts: git@github.com:tVERsion/TapVSTap.git
+
+
+deploy:
+ provider: "releases"  
+ user: "tVERsion" 
+ password: "turkinserega2405"
+ file: "TapVSTap"
+ skip_cleanup: true
+ on:
+  tag: true
