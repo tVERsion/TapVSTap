@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.*;
-
+// класс Font отвечает за оформление текста
 public class Font {
 
     private BitmapFont font;
     private String FONT_PATH;
-
+    // конструктор принимает входные параметры: имя файла в котором хранится шрифт, размер шрифта в кеглях, цвет, отображение(true - вверх ногами)
     public Font(String fileName, int size, Color color, boolean flip) {
         FONT_PATH = fileName;
 
@@ -37,7 +37,7 @@ public class Font {
 
 
 
-
+    // метод getFont возвращает с генерированный в конструкторе экземпляр класса BitmapFont
     public BitmapFont getFont() {
         return font;
     }

@@ -1,12 +1,11 @@
 package ru.tversion.state;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 
 import java.util.Stack;
 
 import ru.tversion.Score;
-
+// менеджер состояний игры
 public class GameStateManager {
     private Stack<State> states;
     private int height;
@@ -15,11 +14,11 @@ public class GameStateManager {
     private int currentRound;
     private Score score;
 
-
+// конструктор по умолчанию
     public GameStateManager() {
         states = new Stack<State>();
     }
-
+// конструктор принимает на вход высоту и ширину
     public GameStateManager(int height, int width) {
         this.height = height;
         this.width = width;
@@ -27,27 +26,20 @@ public class GameStateManager {
         score = new Score();
         currentRound = 1;
     }
-
+// принимает состояние в стек
     public void push(State state) {
         states.push(state);
     }
-
+// удаляет состояние
     public void pop() {
         states.pop().dispose();
     }
-
+// принимает состояние в стэк и очищает предыдущее
     public void set(State state) {
         states.pop().dispose();
         states.push(state);
     }
-
-    public void set(PlayState state) {
-        states.pop().dispose();
-        states.push(state);
-
-
-    }
-
+// отдельный set для TimerState
     public void set(TimerState state) {
         if (!score.isHeadHeat()) {
             currentRound = getCurrentRound() + 1;
@@ -62,15 +54,15 @@ public class GameStateManager {
         states.pop().dispose();
         states.push(state);
     }
-
+// обновление состояния
     public void update(float dt) {
         states.peek().update(dt);
     }
-
+// отрисовка экрана
     public void render(SpriteBatch sb) {
         states.peek().render(sb);
     }
-
+// получение и возврат полей класса
     public int getHeight() {
         return height;
     }

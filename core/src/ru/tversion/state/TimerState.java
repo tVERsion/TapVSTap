@@ -53,7 +53,7 @@ public class TimerState extends State {
         fontTop.draw(sb, ""+gsm.getScore().getTotalScoreTop(), gsm.getWidth() - 50, gsm.getHeight() / 2 + 10);
         fontBottom.draw(sb, ""+gsm.getScore().getTotalScoreBottom(), 50, gsm.getHeight() / 2 - 25);
 
-        
+
         if (timer.isEnd()) {
             gsm.set(new PlayState(gsm, gsm.getCurrentRound()));
         }

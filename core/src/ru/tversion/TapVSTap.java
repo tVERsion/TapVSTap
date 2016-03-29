@@ -11,7 +11,7 @@ import ru.tversion.design.Font;
 import ru.tversion.state.GameStateManager;
 import ru.tversion.state.MenuState;
 import ru.tversion.state.RestartState;
-
+// главный класс игры
 public class TapVSTap extends Game {
     private int WIDTH_DISPLAY;
     private int HEIGHT_DISPLAY;
@@ -19,13 +19,14 @@ public class TapVSTap extends Game {
     private SpriteBatch batch;
     private BitmapFont font;
 
-
+// кончтруктор на входе ширина и высота экрана устройства
     public TapVSTap(int width, int height) {
         setWidthDisplay(width);
         setHeightDisplay(height);
         System.out.println(width+ "      "+height+"      ");
     }
     @Override
+    //создание необходимых элементов
     public void create () {
         batch = new SpriteBatch();
         font = new Font("material.ttf", 48, Color.CYAN, false).getFont();
@@ -35,18 +36,20 @@ public class TapVSTap extends Game {
 
     }
     @Override
+    // отрисовка
     public void render () {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gsm.update(Gdx.graphics.getDeltaTime());
         gsm.render(batch);
     }
     @Override
+    // очистка
     public void dispose() {
         super.dispose();
         getBatch().dispose();
         getFont().dispose();
     }
-
+    // далее возвращение и получение полей класса
     public int getWidthDisplay() {
         return WIDTH_DISPLAY;
     }

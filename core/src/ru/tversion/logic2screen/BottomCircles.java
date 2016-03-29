@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 
 import ru.tversion.figures.TapCircle;
 import ru.tversion.state.GameStateManager;
-
+// реализация интерфейса Circles для нижней части экрана
 public class BottomCircles implements Circles {
     private Array<TapCircle> circles;
     private GameStateManager gsm;
